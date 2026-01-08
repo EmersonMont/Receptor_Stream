@@ -619,16 +619,16 @@ function broadcastJSON(data) {
 
 // Endpoint principal para receber áudio
 app.post("/audio", (req, res) => {
-//  console.log("==============================");
- // console.log("📥 ÁUDIO RECEBIDO");
- // console.log(`📡 IP Origem  : ${req.ip}`);
-//  console.log(`📦 Content-Type: ${req.headers["content-type"]}`);
- // console.log(`📊 Body type  : ${typeof req.body}`);
+  //  console.log("==============================");
+  // console.log("📥 ÁUDIO RECEBIDO");
+  // console.log(`📡 IP Origem  : ${req.ip}`);
+  //  console.log(`📦 Content-Type: ${req.headers["content-type"]}`);
+  // console.log(`📊 Body type  : ${typeof req.body}`);
 
   if (Buffer.isBuffer(req.body)) {
     // Dados binários brutos (PCM)
-   // console.log(`🎵 Tamanho    : ${req.body.length} bytes`);
-  //  console.log("==============================");
+    // console.log(`🎵 Tamanho    : ${req.body.length} bytes`);
+    //  console.log("==============================");
 
     // Enviar direto para os clientes como binário
     broadcastBinary(req.body);
@@ -664,33 +664,32 @@ app.post("/noise", (req, res) => {
 
 // Endpoint para receber estado da tela do dispositivo
 app.post("/screen-status", (req, res) => {
-  const screenState = req.body.screenOn !== undefined ? req.body.screenOn : req.body.state;
-  const isScreenOn = req.body.isScreenOn === true ;
-  
+  const screenState =
+    req.body.screenOn !== undefined ? req.body.screenOn : req.body.state;
+  const isScreenOn = req.body.isScreenOn === true;
 
-  
-console.log( req.body)
+  console.log(req.body);
 
-//   console.log("==============================");
-//   console.log("📱 ESTADO DA TELA");
-//   console.log(`📡 IP Origem  : ${req.ip}`);
-//   console.log(`⏱️  Horário    : ${new Date().toLocaleTimeString('pt-BR')}`);
-//   console.log(`🔴 Status     : ${isScreenOn ? '✅ LIGADA' : '❌ DESLIGADA'}`);
-//   console.log(`📋 Dados      : ${JSON.stringify(req.body)}`);
-//   console.log("==============================");
-  
+  //   console.log("==============================");
+  //   console.log("📱 ESTADO DA TELA");
+  //   console.log(`📡 IP Origem  : ${req.ip}`);
+  //   console.log(`⏱️  Horário    : ${new Date().toLocaleTimeString('pt-BR')}`);
+  //   console.log(`🔴 Status     : ${isScreenOn ? '✅ LIGADA' : '❌ DESLIGADA'}`);
+  //   console.log(`📋 Dados      : ${JSON.stringify(req.body)}`);
+  //   console.log("==============================");
+
   // Enviar para os clientes WebSocket
   broadcastJSON({
     type: "screen-status",
     screenOn: isScreenOn,
     timestamp: new Date().toISOString(),
-    rawData: req.body
+    rawData: req.body,
   });
-  
+
   res.json({
     success: true,
-    message: `Tela ${isScreenOn ? 'ligada' : 'desligada'}`,
-    timestamp: new Date().toISOString()
+    message: `Tela ${isScreenOn ? "ligada" : "desligada"}`,
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -701,11 +700,11 @@ app.get("/screen-status", (req, res) => {
     method: "POST",
     description: "Recebe o estado da tela do dispositivo",
     example: {
-      screenOn: true
+      screenOn: true,
     },
     alternative: {
-      state: "on"
-    }
+      state: "on",
+    },
   });
 });
 
@@ -718,6 +717,8 @@ server.listen(PORT, "0.0.0.0", () => {
   console.log("📋 Endpoints disponíveis:");
   console.log("   POST /audio - recebe dados de áudio (binário ou JSON)");
   console.log("   POST /noise - recebe nível de ruído (JSON)");
-  console.log("   POST /screen-status - recebe estado da tela (screenOn: true/false)");
+  console.log(
+    "   POST /screen-status - recebe estado da tela (screenOn: true/false)"
+  );
   console.log("   GET  /screen-status - exibe informações do endpoint");
 });
